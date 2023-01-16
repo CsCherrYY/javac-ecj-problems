@@ -15,12 +15,39 @@ import java.util.ArrayList;
 
 public class App {
 
-    private static String javacTestFile = "AnnotationMember.java";
+    private static String javacTestFile = "MissingReturnType.java";
     private static String javadocTestFile = "Javadoc.java";
 
     public static void main(String[] args) {
+        //testIncompatibleExceptionInThrows();
+        //testIncompatibleReturnType();
         //javadoc();
         javac();
+        //testRedundantSuperinterface();
+    }
+
+    private static void testRedundantSuperinterface() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Sub.java"), new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Super.java"), new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Super1.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testIncompatibleReturnType() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\incompatibleReturnType\\Sub.java"), new File(".\\app\\src\\testFiles\\incompatibleReturnType\\Super.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testIncompatibleExceptionInThrows() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\incompatibleExpInThrow\\Sub.java"), new File(".\\app\\src\\testFiles\\incompatibleExpInThrow\\Super.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
     }
 
     private static void javadoc() {
