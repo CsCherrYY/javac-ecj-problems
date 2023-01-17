@@ -7,7 +7,6 @@ import javax.tools.JavaFileObject;
 public class JavacDiagnosticsListener implements DiagnosticListener<JavaFileObject> {
     @Override
     public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-        String errorCode = diagnostic.getCode();
-        return;
+        System.out.println(diagnostic.getCode());
     }
 }

@@ -3,7 +3,7 @@
  */
 package javac.ecj.problems;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class AppTest {
     @Test void appHasAGreeting() {
