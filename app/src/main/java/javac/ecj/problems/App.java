@@ -3,7 +3,6 @@
  */
 package javac.ecj.problems;
 
-import com.sun.source.tree.CompilationUnitTree;
 import com.sun.tools.javac.api.JavacTaskImpl;
 
 import javax.tools.DocumentationTool;
@@ -11,37 +10,39 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.util.List;
 import java.io.File;
-import java.util.ArrayList;
 
 public class App {
 
-    private static String javacTestFile = "AnnotationMember.java";
+    private static String javacTestFile = "TypeMismatch.java";
     private static String javadocTestFile = "Javadoc.java";
 
     public static void main(String[] args) {
         //javadoc();
         javac();
+        //testAmbiguous();
     }
 
     private static void javadoc() {
         DocumentationTool documentationTool = ToolProvider.getSystemDocumentationTool();
-        var compUnits = documentationTool.getStandardFileManager(null, null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\" + javadocTestFile));
+        var compUnits = documentationTool.getStandardFileManager(null, null, null).getJavaFileObjects(new File("app\\src\\testFiles\\" + javadocTestFile));
         DocumentationTool.DocumentationTask task = documentationTool.getTask(null, null, new JavacDiagnosticsListener(), null, null, compUnits);
         task.call();
     }
 
     private static void javac() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
-        // create a compilation task (JavacTask) for the given java source file
-        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\" + javacTestFile));
-        // we need to cast to JavacTask so that we can call parse method
-        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        List<String> options = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File("app\\src\\testFiles\\" + javacTestFile));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), options, null, compUnits);
         task.call();
-//        List<CompilationUnitTree> roots = new ArrayList<>();
-//        it.forEach(i -> {
-//            roots.add(i);
-//        });
+    }
+
+    private static void testAmbiguous() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> options = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\" + "Ambiguous.java"), new File(".\\app\\src\\testFiles\\pkg1\\" + "A.java"), new File(".\\app\\src\\testFiles\\pkg2\\" + "A.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), options, null, compUnits);
+        task.call();
     }
 
 }
