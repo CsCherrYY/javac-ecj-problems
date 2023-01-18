@@ -8,12 +8,14 @@ import com.sun.tools.javac.api.JavacTaskImpl;
 import javax.tools.DocumentationTool;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+import java.io.IOException;
 import java.util.List;
 import java.io.File;
+import java.util.Scanner;
 
 public class App {
 
-    private static String javacTestFile = "MissingReturnType.java";
+    private static String javacTestFile = "MethodReturnsVoid.java";
     private static String javadocTestFile = "Javadoc.java";
 
     public static void main(String[] args) {
@@ -23,6 +25,186 @@ public class App {
         javac();
         //testAmbiguous();
         //testRedundantSuperinterface();
+        //testAccess1();
+        //testSealed();
+        //testSealedNotDirectSuper();
+        //testSealedDoesNotPermit();
+        //testInstanceDuringConstructorInvocation();
+        //testFinalClass();
+        //testChangeOverriddenModifier();
+        //testChangeOverriddenModifier1();
+        //testChangeOverriddenModifier2();
+        //testModifiers();
+        //testNotVisibleField();
+        //testNotVisibleMethod();
+        //testNotVisibleConstructor();
+        //testNotVisibleType();
+        //testAbstractMethodMustBeImplemented();
+        //testMissingValueForAnnotationMember();
+        //testUnhandledExceptionInDefaultConstructor();
+        //testNotVisibleConstructorInDefaultConstructor();
+        //testUndefinedConstructorInDefaultConstructor();
+        //testMissingEnumConstantCase();
+    }
+
+    private static void testMissingEnumConstantCase() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\MissingEnumConstantCase\\Enums.java"), new File(".\\src\\testFiles\\MissingEnumConstantCase\\Foo.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testUndefinedConstructorInDefaultConstructor() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\UndefinedConstructorInDefaultConstructor\\Super.java"), new File(".\\src\\testFiles\\UndefinedConstructorInDefaultConstructor\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testNotVisibleConstructorInDefaultConstructor() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\NotVisibleConstructorInDefaultConstructor\\Super.java"), new File(".\\src\\testFiles\\NotVisibleConstructorInDefaultConstructor\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testUnhandledExceptionInDefaultConstructor() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\UnhandledExceptionInDefaultConstructor\\Super.java"), new File(".\\src\\testFiles\\UnhandledExceptionInDefaultConstructor\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testMissingValueForAnnotationMember() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\MissingValueForAnnotationMember\\CustomAnnotation.java"), new File(".\\src\\testFiles\\MissingValueForAnnotationMember\\A.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testAbstractMethodMustBeImplemented() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\abstractMethodMustBeImplemented\\Super.java"), new File(".\\src\\testFiles\\abstractMethodMustBeImplemented\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testNotVisibleType() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\notVisibleType\\A.java"), new File(".\\src\\testFiles\\notVisibleType\\B.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testNotVisibleConstructor() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\notVisibleConstructor\\A.java"), new File(".\\src\\testFiles\\notVisibleConstructor\\B.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testNotVisibleMethod() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\notVisibleMethod\\A.java"), new File(".\\src\\testFiles\\notVisibleMethod\\B.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testNotVisibleField() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\notVisibleField\\A.java"), new File(".\\src\\testFiles\\notVisibleField\\B.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testModifiers() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\modifiers\\Super.java"), new File(".\\src\\testFiles\\modifiers\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testChangeOverriddenModifier2() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\changeOverriddenModifier2\\Super.java"), new File(".\\src\\testFiles\\changeOverriddenModifier2\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testChangeOverriddenModifier1() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\changeOverriddenModifier1\\I.java"), new File(".\\src\\testFiles\\changeOverriddenModifier1\\C.java"), new File(".\\src\\testFiles\\changeOverriddenModifier1\\A.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testChangeOverriddenModifier() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\changeOverriddenModifier\\Super.java"), new File(".\\src\\testFiles\\changeOverriddenModifier\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testFinalClass() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\finalClass\\FinalClass.java"), new File(".\\src\\testFiles\\finalClass\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testInstanceDuringConstructorInvocation() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\InstanceDuringConstructorInvocation\\Super.java"), new File(".\\src\\testFiles\\InstanceDuringConstructorInvocation\\Sub.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testSealedDoesNotPermit() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\sealedDoesNotPermit\\Car.java"), new File(".\\src\\testFiles\\sealedDoesNotPermit\\Service.java"), new File(".\\src\\testFiles\\sealedDoesNotPermit\\Truck.java"), new File(".\\src\\testFiles\\sealedDoesNotPermit\\Vehicle.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testSealedNotDirectSuper() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\sealedNotDirectSuper\\Car.java"), new File(".\\src\\testFiles\\sealedNotDirectSuper\\Service.java"), new File(".\\src\\testFiles\\sealedNotDirectSuper\\Truck.java"), new File(".\\src\\testFiles\\sealedNotDirectSuper\\Vehicle.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testSealed() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\sealed\\Car.java"), new File(".\\src\\testFiles\\sealed\\Service.java"), new File(".\\src\\testFiles\\sealed\\Truck.java"), new File(".\\src\\testFiles\\sealed\\Vehicle.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
+    }
+
+    private static void testAccess1() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\access1\\Sub.java"), new File(".\\app\\src\\testFiles\\access1\\Super.java"));
+        JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
+        task.call();
     }
 
     private static void testRedundantSuperinterface() {
@@ -59,7 +241,7 @@ public class App {
     private static void javac() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<String> options = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
-        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File("app\\src\\testFiles\\" + javacTestFile));
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File("src\\testFiles\\" + javacTestFile));
         JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), options, null, compUnits);
         task.call();
     }
