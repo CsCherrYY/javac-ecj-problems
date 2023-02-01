@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 public class UnreachableCatch {
 
     public void testUnreachableCatch() {
+        // compiler.err.except.never.thrown.in.try
         try {
             String a = "a";
         } catch (IOException e) {

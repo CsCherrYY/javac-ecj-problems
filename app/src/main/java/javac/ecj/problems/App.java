@@ -8,14 +8,12 @@ import com.sun.tools.javac.api.JavacTaskImpl;
 import javax.tools.DocumentationTool;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.IOException;
 import java.util.List;
 import java.io.File;
-import java.util.Scanner;
 
 public class App {
 
-    private static String javacTestFile = "MethodReturnsVoid.java";
+    private static String javacTestFile = "InvalidUnionTypeReferenceSequenceCatch.java";
     private static String javadocTestFile = "Javadoc.java";
 
     public static void main(String[] args) {
@@ -202,23 +200,24 @@ public class App {
     private static void testAccess1() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
-        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\access1\\Sub.java"), new File(".\\app\\src\\testFiles\\access1\\Super.java"));
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\access1\\Sub.java"), new File(".\\src\\testFiles\\access1\\Super.java"));
         JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
         task.call();
     }
 
     private static void testRedundantSuperinterface() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
-        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Sub.java"), new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Super.java"), new File(".\\app\\src\\testFiles\\RedundantSuperinterface\\Super1.java"));
+        List<String> OPTIONS = List.of("--release=" + 17, "-Xlint:all"); //$NON-NLS-1$
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\RedundantSuperinterface\\Sub.java"), new File(".\\src\\testFiles\\RedundantSuperinterface\\Super.java"), new File(".\\src\\testFiles\\RedundantSuperinterface\\Super1.java"));
         JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
         task.call();
     }
 
     private static void testIncompatibleReturnType() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+
         List<String> OPTIONS = List.of("--release=" + 11, "-Xlint:all"); //$NON-NLS-1$
-        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\app\\src\\testFiles\\incompatibleReturnType\\Sub.java"), new File(".\\app\\src\\testFiles\\incompatibleReturnType\\Super.java"));
+        var compUnits = compiler.getStandardFileManager(new JavacDiagnosticsListener(), null, null).getJavaFileObjects(new File(".\\src\\testFiles\\incompatibleReturnType\\Sub.java"), new File(".\\src\\testFiles\\incompatibleReturnType\\Super.java"));
         JavacTaskImpl task = (JavacTaskImpl) compiler.getTask(null, null, new JavacDiagnosticsListener(), OPTIONS, null, compUnits);
         task.call();
     }

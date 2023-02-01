@@ -11,6 +11,6 @@ public class Sub extends Super {
 
     @Override
     public void staticMethod() {
-
+        // compiler.err.override.meth, compiler.err.method.does.not.override.superclass
     }
 }

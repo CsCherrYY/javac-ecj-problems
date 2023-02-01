@@ -4,7 +4,7 @@ public class Unresolved {
         String test = this.str;
     }
 
-    private void testUndefinedVariable() {
+    private void testUnresolvedVariable() {
         // "compiler.err.cant.resolve.location"
         String test = str;
     }

@@ -8,6 +8,7 @@ public class JavacDiagnosticsListener implements DiagnosticListener<JavaFileObje
     @Override
     public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
         System.out.println(diagnostic.getCode());
+        System.out.println("line: " + diagnostic.getLineNumber() + " column: " + diagnostic.getColumnNumber());
         System.out.println(diagnostic.getMessage(null));
     }
 }

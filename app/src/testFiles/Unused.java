@@ -8,4 +8,12 @@ public class Unused {
     private void unusedPrivateMethod() {
 
     }
+
+    private void LocalVariableIsNeverUsed() {
+        String i = "i";
+    }
+
+    private static class PrivateType {
+        // intellij: private.inner.class.is.not.used
+    }
 }
